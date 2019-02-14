@@ -1,0 +1,29 @@
+<form (ngSubmit)="salvar()">   
+ 
+  <br/>
+  <h3>{{titulo}}</h3>
+
+  <label>Código:
+      <input type="input" name="codigo" size="10" [(ngModel)]="pessoa.codigo" disabled/>
+  </label><br/><br/>
+
+  <label>Nome:
+      <input type="input" name="nome" size="30" [(ngModel)]="pessoa.nome"/>
+  </label><br/><br/>
+
+  <label>Registro Ativo:
+      <input type="radio" name="ativo" [(ngModel)]="pessoa.ativo" [value]="true">Sim
+      <input type="radio" name="ativo" [(ngModel)]="pessoa.ativo" [value]="false">Não<br>
+  </label><br/><br/>
+
+  <button type="submit">Salvar</button>
+
+  <!--AQUI VAI SER CRIADO O MENU-->
+<app-menu></app-menu>
+ 
+<div>
+  <br/><br/>
+  <!--AQUI VAI SER RENDERIZADO AS NOSSAS VIEWS/COMPONENTS-->
+  <router-outlet></router-outlet>
+</div>
+</form>
