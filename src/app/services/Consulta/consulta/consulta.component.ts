@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ErrorHandler } from '@angular/core';
 import { Router } from '@angular/router';
+import { PessoaServiceService } from '../../PessoaService.service';
+import { Pessoa } from '../../pessoa';
+import { Response } from '../../response';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-consulta',
@@ -7,11 +11,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./consulta.component.css']
 })
 export class ConsultaComponent implements OnInit {
-  private pessoas: Pessoa[] = new Array();
+    private pessoas: any;
     private titulo:string;
 
-  constructor(private pessoaService: PessoaService,
-    private router: Router) { }
+  constructor(private pessoaService: PessoaServiceService,
+    private router: Router,
+    private messageService: MessageService) { }
 
   ngOnInit() {
     /*SETA O TÍTULO */
@@ -23,40 +28,23 @@ export class ConsultaComponent implements OnInit {
 
   /**EXCLUI UM REGISTRO QUANDO CLICAMOS NA OPÇÃO EXCLUIR DE UMA 
      * LINHA DA TABELA*/
-    excluir(codigo:number, index:number):void {
+    excluir(codigo:number, index:number) {
  
       if(confirm("Deseja realmente excluir esse registro?")){
  
         /*CHAMA O SERVIÇO PARA REALIZAR A EXCLUSÃO */
-        this.pessoaService.excluirPessoa(codigo).subscribe(response => {
+        this.pessoaService.excluirPessoa(codigo).subscribe(res => {
  
-              /**PEGA O RESPONSE DO SERVIÇO */
-              let res:Response = <Response>response;
- 
-              /*1 = SUCESSO
-              * MOSTRAMOS A MENSAGEM RETORNADA PELO SERVIÇO E DEPOIS REMOVEMOS
-              O REGISTRO DA TABELA HTML*/
-              if(res.codigo == 1){
-                alert(res.mensagem);
-                this.pessoas.splice(index,1);
-              }
-              else{
-                /*0 = EXCEPTION GERADA NO SERVIÇO JAVA */
-                alert(res.mensagem);
-              }
-          },
-          (erro) => {                    
-               /*MOSTRA ERROS NÃO TRATADOS */
-               alert(erro);
-          });        
+          let response: Response = res.body;
+          if(response != null){
+            this.messageService.add({ severity: 'success', summary: 'Sucesso!', detail: 'Cadastro excluido com sucesso' });
+          }
+          }, err => { throw err; });      
       }
  
     }
  
     editar(codigo:number):void{
- 
       this.router.navigate(['/cadastro-pessoa',codigo]);
- 
     }
-
 }

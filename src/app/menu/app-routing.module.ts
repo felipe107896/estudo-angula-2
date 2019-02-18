@@ -3,15 +3,13 @@ import { CadastroComponent } from './../services/componentes/cadastro/cadastro.c
 import { ModuleWithProviders }  from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
  
- 
-
- 
 const appRoutes: Routes = [
     { path: 'home',                    component: CadastroComponent },
     { path: 'consulta-pessoa',         component: ConsultaComponent },
     { path: 'cadastro-pessoa',         component: CadastroComponent },
     { path: 'cadastro-pessoa/:codigo', component: CadastroComponent }
  
-];
- 
+]; 
+
+export class AppRoutingModule { } 
 export const routing: ModuleWithProviders = RouterModule.forRoot(appRoutes);

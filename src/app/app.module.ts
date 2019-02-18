@@ -1,13 +1,16 @@
 import { CadastroComponent } from './services/componentes/cadastro/cadastro.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { NgModule, ErrorHandler } from '@angular/core';
+import {HttpClientModule} from "@angular/common/http";
 import { FormsModule } from '@angular/forms';
-import { AppRoutingModule } from './app-routing.module';
 import { ConfigService } from './services/config.service';
-import { PessoaServiceService } from './services/pessoaService.service';
+import { PessoaServiceService } from './services/PessoaService.service';
 import { ConsultaComponent } from './services/Consulta/consulta/consulta.component';
 import { MenuComponent } from './menu/menu.component';
+import { GlobalErrorHandlerService } from './Exception/global-error-handler.service';
+import { routing } from './menu/app-routing.module';
+import { MessageService } from 'primeng/api';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -18,10 +21,13 @@ import { MenuComponent } from './menu/menu.component';
   imports: [
     BrowserModule,
     FormsModule,
-    HttpClient,
-    AppRoutingModule
+    HttpClientModule,
+    routing,
+    RouterModule
+    
   ],
-  providers: [ConfigService, PessoaServiceService],/**estamos informando quem são os nosso provedores de serviços */
+  providers: [ConfigService, PessoaServiceService, MessageService ,GlobalErrorHandlerService, { provide: ErrorHandler, useClass: GlobalErrorHandlerService } ],/**estamos informando quem são os nosso provedores de serviços */
   bootstrap: [CadastroComponent]
 })
+
 export class AppModule { }
