@@ -11,12 +11,14 @@ import { GlobalErrorHandlerService } from './Exception/global-error-handler.serv
 import { routing } from './menu/app-routing.module';
 import { MessageService } from 'primeng/api';
 import { RouterModule } from '@angular/router';
+import { PrincipalComponent } from './principal/principal.component';
 
 @NgModule({
   declarations: [
     CadastroComponent,
     ConsultaComponent,
     MenuComponent,
+    PrincipalComponent,
   ],
   imports: [
     BrowserModule,
@@ -27,7 +29,7 @@ import { RouterModule } from '@angular/router';
     
   ],
   providers: [ConfigService, PessoaServiceService, MessageService ,GlobalErrorHandlerService, { provide: ErrorHandler, useClass: GlobalErrorHandlerService } ],/**estamos informando quem são os nosso provedores de serviços */
-  bootstrap: [CadastroComponent]
+  bootstrap: [PrincipalComponent]
 })
 
 export class AppModule { }
