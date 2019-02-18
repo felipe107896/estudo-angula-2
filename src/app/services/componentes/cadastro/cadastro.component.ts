@@ -18,6 +18,7 @@ export class CadastroComponent implements OnInit {
   private pessoa:Pessoa = new Pessoa();
   res: Response;
   formularioVazio: boolean;
+  
 
   constructor(private pessoaService: PessoaServiceService,
     private router: Router,

@@ -4,7 +4,7 @@
   <h3>{{titulo}}</h3>
 
   <label>Código:
-      <input type="input" name="codigo" size="10" [(ngModel)]="pessoa.codigo" disabled/>
+      <input type="input" name="codigo" size="10" [(ngModel)]="pessoa.codigo"/>
   </label><br/><br/>
 
   <label>Nome:
@@ -12,8 +12,10 @@
   </label><br/><br/>
 
   <label>Registro Ativo:
-      <input type="radio" name="ativo" [(ngModel)]="pessoa.selecionado" [value]="sim">Sim
-      <input type="radio" name="ativo" [(ngModel)]="pessoa.selecionado" [value]="nao">Não<br>
+      <input type="radio" name="ativo" [(ngModel)]="pessoa.selecionado" value="sim" 
+      >Sim
+      <input type="radio" name="ativo" [(ngModel)]="pessoa.selecionado" value="nao">
+      Não<br>
   </label><br/><br/>
 
   <button type="submit">Salvar</button>
