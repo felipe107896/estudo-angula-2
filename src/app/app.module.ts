@@ -12,6 +12,10 @@ import { routing } from './menu/app-routing.module';
 import { MessageService } from 'primeng/api';
 import { RouterModule } from '@angular/router';
 import { PrincipalComponent } from './principal/principal.component';
+import { CalendarModule } from 'primeng/calendar';
+import { InputMaskModule } from 'primeng/inputmask';
+import { BsDatepickerModule} from 'ngx-bootstrap/datepicker';
+
 
 @NgModule({
   declarations: [
@@ -25,7 +29,10 @@ import { PrincipalComponent } from './principal/principal.component';
     FormsModule,
     HttpClientModule,
     routing,
-    RouterModule
+    RouterModule,
+    CalendarModule,
+    InputMaskModule,
+    BsDatepickerModule.forRoot()
     
   ],
   providers: [ConfigService, PessoaServiceService, MessageService ,GlobalErrorHandlerService, { provide: ErrorHandler, useClass: GlobalErrorHandlerService } ],/**estamos informando quem são os nosso provedores de serviços */
