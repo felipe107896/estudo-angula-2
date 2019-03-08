@@ -1,0 +1,21 @@
+.container{
+    margin-top:3%;
+    width: 40%;
+}
+form{
+    position:fixed;
+ 
+    left:30%;
+    width:450px;
+    height: 400px;
+    background-color: rgba(230, 230, 230, 0.71);
+    border: 1px solid  rgba(106, 141, 173, 0.71);;
+    border-radius: 14px;
+ }
+ label{
+     margin-right: 70px;
+ }
+ #login{
+     margin-top: 8%;
+ }
+ 

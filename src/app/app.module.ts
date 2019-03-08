@@ -10,11 +10,17 @@ import { MenuComponent } from './menu/menu.component';
 import { GlobalErrorHandlerService } from './Exception/global-error-handler.service';
 import { routing } from './menu/app-routing.module';
 import { MessageService } from 'primeng/api';
+import { DialogModule } from 'primeng/dialog';
 import { RouterModule } from '@angular/router';
 import { PrincipalComponent } from './principal/principal.component';
 import { CalendarModule } from 'primeng/calendar';
 import { InputMaskModule } from 'primeng/inputmask';
 import { BsDatepickerModule} from 'ngx-bootstrap/datepicker';
+import { TableModule } from 'primeng/table';
+import { DropdownModule } from 'primeng/dropdown';
+import { LoginComponent } from './Login/login/login.component';
+
+
 
 
 @NgModule({
@@ -23,6 +29,7 @@ import { BsDatepickerModule} from 'ngx-bootstrap/datepicker';
     ConsultaComponent,
     MenuComponent,
     PrincipalComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,6 +39,9 @@ import { BsDatepickerModule} from 'ngx-bootstrap/datepicker';
     RouterModule,
     CalendarModule,
     InputMaskModule,
+    TableModule,
+    DropdownModule,
+    DialogModule,
     BsDatepickerModule.forRoot()
     
   ],

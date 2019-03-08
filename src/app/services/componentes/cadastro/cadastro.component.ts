@@ -18,8 +18,10 @@ export class CadastroComponent implements OnInit {
   private pessoa:Pessoa = new Pessoa();
   res: Response;
   formularioVazio: boolean;
+  sexos: any = [];
 
-  campoCpfValidoProp = true;
+
+  campoCpfCnpjValidoParceiro = true;
 
   ngCpfProprietario: any;
   ngTelefone: any;
@@ -28,12 +30,21 @@ export class CadastroComponent implements OnInit {
   ngNumeroFilialCnpj: any;
   tipoPessoa: String;
 
+ 
+
+
   constructor(private pessoaService: PessoaServiceService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private messageService: MessageService) { }
 
   ngOnInit() {
+
+    this.sexos = [
+      { value: 'Masculino' },
+      { value: 'Feminino' }
+    ];
+
     this.activatedRoute.params.subscribe(parametro => {
 
       if (parametro["codigo"] == undefined) {
@@ -95,6 +106,9 @@ export class CadastroComponent implements OnInit {
     this.pessoa.codigo = undefined;
     this.pessoa.nome = undefined;
     this.pessoa.selecionado = undefined;
+    this.pessoa.cpf = undefined;
+    this.pessoa.data = undefined;
+    this.pessoa.telefone = undefined;
   }
 
   executaMascara(objeto) {
@@ -117,17 +131,15 @@ export class CadastroComponent implements OnInit {
     const valorCampo = campo.value.replace(/\D/g, '');
     if(valorCampo.length === 11){
       if(campo.name === 'cpfProprietario') {
-        this.campoCpfValidoProp = this.testarCPF(valorCampo.replace(/\D/g, ''));
+        this.campoCpfCnpjValidoParceiro = this.testarCPF(valorCampo.replace(/\D/g, ''));
       }
-      if (!this.campoCpfValidoProp) { this.ngCpfProprietario = undefined; }
+      if (!this.campoCpfCnpjValidoParceiro) { this.ngCpfProprietario = undefined; }
     }
     else if(valorCampo.length === 14) {
 
     }
 
-  
-
-    return this.campoCpfValidoProp;
+    return this.campoCpfCnpjValidoParceiro;
   }
 
   verificarTelefoneValido() {

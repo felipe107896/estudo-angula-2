@@ -1,12 +1,13 @@
 import { ConfigService } from './config.service';
 import { Pessoa } from './pessoa';
+import { Usuario } from './usuario';
 import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { Headers } from '@angular/http';
 import { RequestOptions } from '@angular/http';
 import { MessageService } from 'primeng/api';
 import { Response } from './response';
-import { Observable } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 
 
@@ -51,5 +52,9 @@ export class PessoaServiceService {
   /**ATUALIZA INFORMAÇÕES DA PESSOA */
   atualizarPessoa(pessoa: Pessoa): Observable<HttpResponse<Response>> {
     return this.http.put<Response>(this.baseUrlService, JSON.stringify(pessoa), { observe: 'response' });
+  }
+
+  login(usuario: Usuario){
+
   }
 }
