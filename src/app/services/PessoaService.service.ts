@@ -3,6 +3,7 @@ import { Pessoa } from './pessoa';
 import { Usuario } from './usuario';
 import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { Headers } from '@angular/http';
 import { RequestOptions } from '@angular/http';
 import { MessageService } from 'primeng/api';
@@ -18,10 +19,13 @@ export class PessoaServiceService {
   private baseUrlService: string = '';
   private headers: Headers;
   private options: RequestOptions;
+  isAuthenticated = JSON.parse(sessionStorage.getItem('logado') || 'false');
+
 
 
   constructor(private http: HttpClient,
-    private configService: ConfigService, private messageService: MessageService) {
+    private configService: ConfigService, private messageService: MessageService,
+    private router: Router) {
     /**SETANDO A URL DO SERVIÇO REST QUE VAI SER ACESSADO */
     this.baseUrlService = configService.getUrlService() + '/pessoa/';
 
@@ -55,6 +59,22 @@ export class PessoaServiceService {
   }
 
   login(usuario: Usuario){
+      if(usuario.login === "felipe" && usuario.senha === "123"){
+        this.isAuthenticated = true;
+        sessionStorage.setItem('logado', JSON.stringify(usuario));
+        this.router.navigate(['/cadastro-pessoa']);
+      } else if (this.http.get<Response>(this.baseUrlService + usuario.login + usuario.senha , {observe: 'response'})){
+        this.isAuthenticated = true;
+        sessionStorage.setItem('logado', JSON.stringify(usuario));
+        this.router.navigate(['/cadastro-pessoa']);
 
+      }
+      else{
+        const msg = 'Falha de Autenticação';
+        console.log('erro autenticacao');
+        this.messageService.add({severity: 'warn', summary: 'Atenção!', detail: 'Erro de autenticação'});
+        console.log(msg);
+        return msg;
+      }
   }
 }

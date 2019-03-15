@@ -9,7 +9,7 @@
     <input type="input" name="nome" id="nome" size="30" [(ngModel)]="pessoa.nome" />
   </label><br /><br />
 
-  <label>Data:<input id="data" name="data" placeholder="99/99/9999" [(ngModel)]="pessoa.data" bsDatepicker
+  <label>Data:<input id="data" name="data" placeholder="99/99/9999" (keyup)="executaMascara(data)" [(ngModel)]="pessoa.data" bsDatepicker
       class="data" /></label><br /><br />
 
   <label for="telefone">Telefone </label>
@@ -17,7 +17,7 @@
     #telefoneParceiro name="telefoneParceiro" (keyup)="executaMascara(telefoneParceiro); validaEditTel()"
     [(ngModel)]="ngTelefoneParceiro" placeholder="(99) 9999-99999" minlength="11" required></p-inputMask>
 
-  <h6>CPF</h6>
+  <h6>CPF/CNPJ</h6>
   <ng-container *ngIf="!campoCpfCnpjValidoParceiro">
     <label class="label-input text-danger"> * Valor Inválido</label>
   </ng-container>
@@ -33,7 +33,7 @@
   </label><br /><br />
 
   Sexo :
-  <select>
+  <select [(ngModel)]="pessoa.sexo" name="sexos">
     <option *ngFor="let sexo of sexos">
       {{sexo.value}}
     </option>

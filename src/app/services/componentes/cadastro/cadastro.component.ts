@@ -6,6 +6,9 @@ import { Response } from '../../response';
 import { PessoaServiceService } from '../../PessoaService.service';
 import { MessageService } from 'primeng/api';
 import { Observable } from 'rxjs';
+import { BsLocaleService } from 'ngx-bootstrap/datepicker';
+import { defineLocale } from 'ngx-bootstrap/chronos';
+import { ptBrLocale } from 'ngx-bootstrap/locale';
 
 @Component({
   selector: 'app-cadastro',
@@ -15,12 +18,12 @@ import { Observable } from 'rxjs';
 export class CadastroComponent implements OnInit {
 
   private titulo: string;
-  private pessoa:Pessoa = new Pessoa();
+  private pessoa: Pessoa = new Pessoa();
   res: Response;
   formularioVazio: boolean;
   sexos: any = [];
-
-
+  locale = 'pt-br';
+ 
   campoCpfCnpjValidoParceiro = true;
 
   ngCpfProprietario: any;
@@ -30,16 +33,19 @@ export class CadastroComponent implements OnInit {
   ngNumeroFilialCnpj: any;
   tipoPessoa: String;
 
- 
-
 
   constructor(private pessoaService: PessoaServiceService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private messageService: MessageService) { }
+    private messageService: MessageService,
+    private localeService: BsLocaleService) { 
+      localeService.use(this.locale);
+    }
 
   ngOnInit() {
 
+    defineLocale('pt-br', ptBrLocale); 
+    
     this.sexos = [
       { value: 'Masculino' },
       { value: 'Feminino' }
@@ -86,7 +92,7 @@ export class CadastroComponent implements OnInit {
       console.log(this.pessoa)
       /*CHAMA O SERVIÇO PARA ADICIONAR UMA NOVA PESSOA */
       this.pessoaService.addPessoa(this.pessoa).subscribe(reponse => {
-        
+
         //PEGA O RESPONSE DO RETORNO DO SERVIÇO
         //let res: Response = reponse.body;
         this.messageService.add({ severity: 'success', summary: 'Sucesso!', detail: 'Cadastro realizado com sucesso' });
@@ -127,16 +133,24 @@ export class CadastroComponent implements OnInit {
     }
   }
 
-  validarCpf(campo) {
+  validarCpfCnpj(campo) {
     const valorCampo = campo.value.replace(/\D/g, '');
-    if(valorCampo.length === 11){
-      if(campo.name === 'cpfProprietario') {
+    if (valorCampo.length === 11) {
+      if (campo.name === 'cpfCnpjParceiro') {
         this.campoCpfCnpjValidoParceiro = this.testarCPF(valorCampo.replace(/\D/g, ''));
       }
       if (!this.campoCpfCnpjValidoParceiro) { this.ngCpfProprietario = undefined; }
     }
-    else if(valorCampo.length === 14) {
+    else if (valorCampo.length === 14) {
+      if (campo.name === 'cpfCnpjParceiro') {
+        this.campoCpfCnpjValidoParceiro = this.testarCNPJ(valorCampo.replace(/\D/g, ''));
 
+        if (!this.campoCpfCnpjValidoParceiro) {
+          this.ngCpfCnpjParceiro = undefined;
+        }
+
+        return this.campoCpfCnpjValidoParceiro;
+      }
     }
 
     return this.campoCpfCnpjValidoParceiro;
@@ -147,7 +161,7 @@ export class CadastroComponent implements OnInit {
     if (this.ngTelefone !== undefined && this.ngTelefone !== null) {
       let telefone = this.ngTelefone.replace(/\D/g, '');
 
-      if ((telefone.length >= 10 && telefone.length <= 12) ) {
+      if ((telefone.length >= 10 && telefone.length <= 12)) {
         return true;
       } else
         return false;
@@ -219,8 +233,9 @@ export class CadastroComponent implements OnInit {
   testarCPF(strCPF) {
     let Soma;
     let Resto;
+    let quantidade;
     Soma = 0;
-
+    
     if (strCPF === '00000000000' ||
       strCPF === '11111111111' ||
       strCPF === '22222222222' ||
@@ -234,7 +249,10 @@ export class CadastroComponent implements OnInit {
       return false;
     }
 
-    if (strCPF === '00000000000') { return false; }
+    if(strCPF.length < 14){
+      return false;
+
+    }
 
     for (let index = 1; index <= 9; index++) { Soma = Soma + parseInt(strCPF.substring(index - 1, index)) * (11 - index); }
     Resto = (Soma * 10) % 11;
@@ -248,6 +266,60 @@ export class CadastroComponent implements OnInit {
 
     if ((Resto == 10) || (Resto == 11)) Resto = 0;
     if (Resto != parseInt(strCPF.substring(10, 11))) return false;
+    return true;
+  }
+
+  testarCNPJ(cnpj) {
+    // Elimina CNPJs invalidos conhecidos
+    if (cnpj === "00000000000000" ||
+      cnpj === "11111111111111" ||
+      cnpj === "22222222222222" ||
+      cnpj === "33333333333333" ||
+      cnpj === "44444444444444" ||
+      cnpj === "55555555555555" ||
+      cnpj === "66666666666666" ||
+      cnpj === "7777.7777777777" ||
+      cnpj === "88888888888888" ||
+      cnpj === "99999999999999")
+      return false;
+
+      if(cnpj.length < 14)
+      return false;
+
+    // Valida DVs
+    let tamanho = cnpj.length - 2;
+    let numeros = cnpj.substring(0, tamanho);
+    let digitos = cnpj.substring(tamanho);
+    let soma = 0;
+    let pos = tamanho - 7;
+
+    for (let index = tamanho; index >= 1; index--) {
+      soma += numeros.charAt(tamanho - index) * pos--;
+      if (pos < 2)
+        pos = 9;
+    }
+
+    let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+
+    if (resultado != digitos.charAt(0))
+      return false;
+
+    tamanho = tamanho + 1;
+    numeros = cnpj.substring(0, tamanho);
+    soma = 0;
+    pos = tamanho - 7;
+
+    for (let index = tamanho; index >= 1; index--) {
+      soma += numeros.charAt(tamanho - index) * pos--;
+      if (pos < 2)
+        pos = 9;
+    }
+
+    resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+
+    if (resultado != digitos.charAt(1))
+      return false;
+
     return true;
   }
 
@@ -279,25 +351,24 @@ export class CadastroComponent implements OnInit {
     }
   }
 
-    mascaraCpf(valorInput, campo) {
+  mascaraCpf(valorInput, campo) {
 
-      //Remove tudo o que não é dígito
-      valorInput = valorInput.replace(/\D/g, "");
-  
-      if (valorInput.length <= 11) { //CPF
-  
-        //Coloca um ponto entre o terceiro e o quarto dígitos
-        valorInput = valorInput.replace(/(\d{3})(\d)/, "$1.$2");
-  
-        //Coloca um ponto entre o terceiro e o quarto dígitos
-        //de novalorInputo (para o segundo bloco de números)
-        valorInput = valorInput.replace(/(\d{3})(\d)/, "$1.$2");
-  
-        //Coloca um hífen entre o terceiro e o quarto dígitos
-        valorInput = valorInput.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-        campo.value = valorInput;
-      }
-  
+    //Remove tudo o que não é dígito
+    valorInput = valorInput.replace(/\D/g, "");
+
+    if (valorInput.length <= 11) { //CPF
+
+      //Coloca um ponto entre o terceiro e o quarto dígitos
+      valorInput = valorInput.replace(/(\d{3})(\d)/, "$1.$2");
+
+      //Coloca um ponto entre o terceiro e o quarto dígitos
+      //de novalorInputo (para o segundo bloco de números)
+      valorInput = valorInput.replace(/(\d{3})(\d)/, "$1.$2");
+
+      //Coloca um hífen entre o terceiro e o quarto dígitos
+      valorInput = valorInput.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      campo.value = valorInput;
     }
   }
+}
 

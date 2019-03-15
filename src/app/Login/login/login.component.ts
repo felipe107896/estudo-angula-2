@@ -13,9 +13,15 @@ import { Usuario } from 'src/app/services/usuario';
 export class LoginComponent implements OnInit {
 
   usuario: Usuario = new Usuario();
+  msg: any;
+
   constructor(private service: PessoaServiceService) { }
 
   ngOnInit() {
+  }
+
+  login(){
+    this.msg = this.service.login(this.usuario);
   }
 
   limpar(){
