@@ -9,6 +9,7 @@ import { RequestOptions } from '@angular/http';
 import { MessageService } from 'primeng/api';
 import { Response } from './response';
 import { Observable, from } from 'rxjs';
+import { map } from 'rxjs/add/operator/map';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 
 
@@ -20,6 +21,7 @@ export class PessoaServiceService {
   private headers: Headers;
   private options: RequestOptions;
   isAuthenticated = JSON.parse(sessionStorage.getItem('logado') || 'false');
+  pessoas: Pessoa[];
 
 
 
@@ -36,7 +38,13 @@ export class PessoaServiceService {
 
   /**CONSULTA TODAS AS PESSOAS CADASTRADAS */
   getPessoas() {
-    return this.http.get(this.baseUrlService, { observe: 'response' });
+      return this.http.get(this.baseUrlService).pipe(map(res => <Pessoa[]> res.json()))
+      .do(pessoas => this.pessoas = pessoas)
+      .catch(this.handleError);
+    //return this.http.get<Response<<Pessoa[]>>(this.baseUrlService, { observe: 'response' });
+  }
+  handleError(handleError: any): any {
+    throw new Error("Method not implemented.");
   }
 
   /**ADICIONA UMA NOVA PESSOA */
