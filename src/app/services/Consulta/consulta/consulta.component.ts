@@ -4,6 +4,7 @@ import { PessoaServiceService } from '../../PessoaService.service';
 import { Pessoa } from '../../pessoa';
 import { Response } from '../../response';
 import { MessageService } from 'primeng/api';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-consulta',
@@ -11,8 +12,8 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./consulta.component.css']
 })
 export class ConsultaComponent implements OnInit {
-    private pessoas: any;
-    private titulo:string;
+  private pessoas: Pessoa[];
+  private titulo: string;
 
   constructor(private pessoaService: PessoaServiceService,
     private router: Router,
@@ -21,30 +22,32 @@ export class ConsultaComponent implements OnInit {
   ngOnInit() {
     /*SETA O TÍTULO */
     this.titulo = "Registros Cadastrados";
- 
+
     /*CHAMA O SERVIÇO E RETORNA TODAS AS PESSOAS CADASTRADAS */
-    this.pessoaService.getPessoas().subscribe(res => this.pessoas = res);
+    this.pessoaService.getPessoas().subscribe(res => {
+      this.pessoas = res
+    }, err => { throw err; });
   }
 
   /**EXCLUI UM REGISTRO QUANDO CLICAMOS NA OPÇÃO EXCLUIR DE UMA 
      * LINHA DA TABELA*/
-    excluir(codigo:number, index:number) {
- 
-      if(confirm("Deseja realmente excluir esse registro?")){
- 
-        /*CHAMA O SERVIÇO PARA REALIZAR A EXCLUSÃO */
-        this.pessoaService.excluirPessoa(codigo).subscribe(res => {
- 
-          let response: Response = res.body;
-          if(response != null){
-            this.messageService.add({ severity: 'success', summary: 'Sucesso!', detail: 'Cadastro excluido com sucesso' });
-          }
-          }, err => { throw err; });      
-      }
- 
+  excluir(codigo: number, index: number) {
+
+    if (confirm("Deseja realmente excluir esse registro?")) {
+
+      /*CHAMA O SERVIÇO PARA REALIZAR A EXCLUSÃO */
+      this.pessoaService.excluirPessoa(codigo).subscribe(res => {
+
+        let response: Response = res.body;
+        if (response != null) {
+          this.messageService.add({ severity: 'success', summary: 'Sucesso!', detail: 'Cadastro excluido com sucesso' });
+        }
+      }, err => { throw err; });
     }
- 
-    editar(codigo:number):void{
-      this.router.navigate(['/cadastro-pessoa',codigo]);
-    }
+
+  }
+
+  editar(codigo: number): void {
+    this.router.navigate(['/cadastro-pessoa', codigo]);
+  }
 }

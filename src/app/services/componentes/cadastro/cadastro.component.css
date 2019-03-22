@@ -15,8 +15,6 @@ form{
     color: white;
     text-align: center;
     vertical-align: middle;    
- 
- 
  }
  
  button{
@@ -36,3 +34,12 @@ form{
  #data, #codigo, #nome{
     width:90%;
  }
+
+ select {
+   cursor:pointer;
+   display:inline-block;
+   position:relative;
+   font:normal 18px/40px Arial, Sans-Serif;
+   color:black;
+   border:1px solid #ccc;
+}

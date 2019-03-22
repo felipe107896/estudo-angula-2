@@ -23,7 +23,7 @@ export class CadastroComponent implements OnInit {
   formularioVazio: boolean;
   sexos: any = [];
   locale = 'pt-br';
- 
+
   campoCpfCnpjValidoParceiro = true;
 
   ngCpfProprietario: any;
@@ -38,14 +38,14 @@ export class CadastroComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private messageService: MessageService,
-    private localeService: BsLocaleService) { 
-      localeService.use(this.locale);
-    }
+    private localeService: BsLocaleService) {
+    localeService.use(this.locale);
+  }
 
   ngOnInit() {
 
-    defineLocale('pt-br', ptBrLocale); 
-    
+    defineLocale('pt-br', ptBrLocale);
+
     this.sexos = [
       { value: 'Masculino' },
       { value: 'Feminino' }
@@ -60,6 +60,7 @@ export class CadastroComponent implements OnInit {
       else {
         this.titulo = "Editar Cadastro de Pessoa";
         this.pessoaService.getPessoa(Number(parametro["codigo"])).subscribe(res => {
+          this.pessoa = res;
         }, err => { throw err; })
       }
     });
@@ -235,7 +236,7 @@ export class CadastroComponent implements OnInit {
     let Resto;
     let quantidade;
     Soma = 0;
-    
+
     if (strCPF === '00000000000' ||
       strCPF === '11111111111' ||
       strCPF === '22222222222' ||
@@ -249,7 +250,7 @@ export class CadastroComponent implements OnInit {
       return false;
     }
 
-    if(strCPF.length < 14){
+    if (strCPF.length < 14) {
       return false;
 
     }
@@ -283,7 +284,7 @@ export class CadastroComponent implements OnInit {
       cnpj === "99999999999999")
       return false;
 
-      if(cnpj.length < 14)
+    if (cnpj.length < 14)
       return false;
 
     // Valida DVs

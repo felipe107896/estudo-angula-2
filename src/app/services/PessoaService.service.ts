@@ -9,7 +9,6 @@ import { RequestOptions } from '@angular/http';
 import { MessageService } from 'primeng/api';
 import { Response } from './response';
 import { Observable, from } from 'rxjs';
-import { map } from 'rxjs/add/operator/map';
 import { HttpClient, HttpResponse } from '@angular/common/http';
 
 
@@ -21,8 +20,6 @@ export class PessoaServiceService {
   private headers: Headers;
   private options: RequestOptions;
   isAuthenticated = JSON.parse(sessionStorage.getItem('logado') || 'false');
-  pessoas: Pessoa[];
-
 
 
   constructor(private http: HttpClient,
@@ -37,16 +34,10 @@ export class PessoaServiceService {
   }
 
   /**CONSULTA TODAS AS PESSOAS CADASTRADAS */
-  getPessoas() {
-      return this.http.get(this.baseUrlService).pipe(map(res => <Pessoa[]> res.json()))
-      .do(pessoas => this.pessoas = pessoas)
-      .catch(this.handleError);
-    //return this.http.get<Response<<Pessoa[]>>(this.baseUrlService, { observe: 'response' });
+  getPessoas(): Observable<Pessoa[]> {
+    return this.http.get<Pessoa[]>(this.baseUrlService);
   }
-  handleError(handleError: any): any {
-    throw new Error("Method not implemented.");
-  }
-
+  
   /**ADICIONA UMA NOVA PESSOA */
   addPessoa(pessoa: Pessoa): Observable<HttpResponse<Response>> {
     return this.http.post<Response>(this.baseUrlService, JSON.stringify(pessoa), { observe: 'response' });
@@ -57,8 +48,8 @@ export class PessoaServiceService {
   }
 
   /**CONSULTA UMA PESSOA PELO CÓDIGO */
-  getPessoa(codigo: number): Observable<HttpResponse<Response>> {
-    return this.http.get<Response>(this.baseUrlService + codigo, { observe: 'response' });
+  getPessoa(codigo: number): Observable<Pessoa> {
+    return this.http.get<Pessoa>(this.baseUrlService + codigo);
   }
 
   /**ATUALIZA INFORMAÇÕES DA PESSOA */

@@ -12,19 +12,20 @@
   <label>Data:<input id="data" name="data" placeholder="99/99/9999" (keyup)="executaMascara(data)" [(ngModel)]="pessoa.data" bsDatepicker
       class="data" /></label><br /><br />
 
-  <label for="telefone">Telefone </label>
+  <label for="telefone">Telefone: <br />
   <p-inputMask mask="(99) 9999-9999?9" [class.campoInvalido]="!verificarTelefoneValido()" id="telefoneParceiro"
     #telefoneParceiro name="telefoneParceiro" (keyup)="executaMascara(telefoneParceiro); validaEditTel()"
-    [(ngModel)]="ngTelefoneParceiro" placeholder="(99) 9999-99999" minlength="11" required></p-inputMask>
+    [(ngModel)]="ngTelefoneParceiro" placeholder="(99) 9999-99999" minlength="11" required></p-inputMask></label>
 
-  <h6>CPF/CNPJ</h6>
+  
+    <label>CPF/CNPJ:
   <ng-container *ngIf="!campoCpfCnpjValidoParceiro">
     <label class="label-input text-danger"> * Valor Inválido</label>
   </ng-container>
   <input type [class.campoInvalido]="!campoCpfCnpjValidoParceiro" type="text" id="cpfCnpjParceiro" #cpfCnpjParceiro required
-    class="form-control" name="cpfCnpjParceiro" placeholder="99.999.999/9999-99"
+     name="cpfCnpjParceiro" placeholder="99.999.999/9999-99"
     (blur)="setarSemMascara(); validarCpfCnpj(cpfCnpjParceiro)" minlength="13" maxlength="18"
-    (keyup)="executaMascara(cpfCnpjParceiro); retirarMascara();" [(ngModel)]="ngCpfCnpjParceiro">
+    (keyup)="executaMascara(cpfCnpjParceiro); retirarMascara();" [(ngModel)]="ngCpfCnpjParceiro"></label>
 
   <label>Registro Ativo:
     <input type="radio" name="ativo" [(ngModel)]="pessoa.selecionado" value="sim">Sim
@@ -32,12 +33,13 @@
     Não<br>
   </label><br /><br />
 
-  Sexo :
+  <label> Sexo :
   <select [(ngModel)]="pessoa.sexo" name="sexos">
     <option *ngFor="let sexo of sexos">
       {{sexo.value}}
     </option>
   </select>
+</label><br /><br />
 
   <button type="submit" class="btn btn-primary">Salvar</button>
 </form>
